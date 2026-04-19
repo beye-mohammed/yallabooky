@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PageVault — Free Book Library</title>
+    <title>YallaBooky — Free Book Library</title>
 
     <!-- Dynamic OG meta tags (filled by JS for sharing) -->
-    <meta property="og:title"       id="og-title"       content="PageVault — Free Book Library">
+    <meta property="og:title"       id="og-title"       content="YallaBooky — Free Book Library">
     <meta property="og:description" id="og-desc"        content="Thousands of free books, ready to download.">
     <meta property="og:type"        content="website">
 
@@ -568,7 +568,7 @@
 
 <!-- ═══════ FOOTER ════════════════════════ -->
 <footer>
-    <p>© 2025 PageVault — All books are provided for free educational use.
+    <p>© 2025 YallaBooky — All books are provided for free educational use.
         <a href="#">Contact</a> · <a href="#">DMCA</a> · <a href="#">Privacy</a>
     </p>
 </footer>
@@ -744,7 +744,7 @@
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       document.getElementById('page-home').classList.add('active');
       window.scrollTo(0, 0);
-      document.title = 'PageVault — Free Book Library';
+      document.title = 'YallaBooky — Free Book Library';
     }
 
     function showDetail(book) {
@@ -778,7 +778,7 @@
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       document.getElementById('page-detail').classList.add('active');
       window.scrollTo(0, 0);
-      document.title = `${book.title} — PageVault`;
+      document.title = `${book.title} — YallaBooky`;
     }
 
     // ─────────────────────────────────────────
@@ -793,7 +793,7 @@
     function shareBook() {
       if (!currentBook) return;
       const url   = window.location.origin + window.location.pathname + '#/book/' + currentBook.slug;
-      const title = currentBook.title + ' — PageVault';
+      const title = currentBook.title + ' — YallaBooky';
       if (navigator.share) {
         navigator.share({ title, url });
       } else {
@@ -829,7 +829,7 @@
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       document.getElementById('page-download').classList.add('active');
       window.scrollTo(0, 0);
-      document.title = `Downloading ${book.title} — PageVault`;
+      document.title = `Downloading ${book.title} — YallaBooky`;
 
       runCountdown(book.link);
     }
