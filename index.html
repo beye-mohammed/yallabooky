@@ -4,27 +4,34 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PageVault — Free Book Library</title>
+
+<!-- Dynamic OG meta tags (filled by JS for sharing) -->
+<meta property="og:title"       id="og-title"       content="PageVault — Free Book Library">
+<meta property="og:description" id="og-desc"        content="Thousands of free books, ready to download.">
+<meta property="og:type"        content="website">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg: #0c0b0a;
-    --bg2: #141210;
-    --bg3: #1c1916;
-    --border: rgba(255,255,255,0.07);
+    --bg:     #0c0b0a;
+    --bg2:    #141210;
+    --bg3:    #1c1916;
+    --border:  rgba(255,255,255,0.07);
     --border2: rgba(255,255,255,0.13);
-    --amber: #e8a030;
-    --amber-dim: rgba(232,160,48,0.12);
+    --amber:      #e8a030;
+    --amber-dim:  rgba(232,160,48,0.12);
     --amber-glow: rgba(232,160,48,0.25);
-    --text: #f0ece4;
+    --text:  #f0ece4;
     --text2: #9a9086;
     --text3: #5e574e;
     --font-display: 'Cormorant Garamond', serif;
-    --font-body: 'DM Sans', sans-serif;
-    --radius: 12px;
-    --radius-sm: 7px;
+    --font-body:    'DM Sans', sans-serif;
+    --radius:    12px;
+    --radius-sm:  7px;
   }
 
   html { scroll-behavior: smooth; }
@@ -36,7 +43,7 @@
     overflow-x: hidden;
   }
 
-  /* ── NOISE TEXTURE OVERLAY ─────────────────── */
+  /* noise overlay */
   body::before {
     content: '';
     position: fixed; inset: 0;
@@ -46,15 +53,45 @@
     z-index: 0;
   }
 
-  /* ── PAGES ─────────────────────────────────── */
+  /* ── PAGES ── */
   .page { display: none; position: relative; z-index: 1; }
-  .page.active { display: block; animation: fadeIn 0.4s ease; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+  .page.active { display: block; animation: fadeIn 0.35s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 
-  /* ── NAV ────────────────────────────────────── */
+  /* loading state */
+  #loading {
+    position: fixed; inset: 0; z-index: 999;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 1.2rem;
+    transition: opacity 0.4s;
+  }
+  #loading.hidden { opacity: 0; pointer-events: none; }
+  .loader-logo {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--amber);
+  }
+  .loader-logo span { color: var(--text2); }
+  .loader-bar {
+    width: 160px; height: 2px;
+    background: var(--bg3);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .loader-bar-fill {
+    height: 100%;
+    background: var(--amber);
+    border-radius: 99px;
+    animation: loadBar 0.8s ease forwards;
+  }
+  @keyframes loadBar { from { width: 0; } to { width: 100%; } }
+
+  /* ── NAV ── */
   nav {
     position: sticky; top: 0; z-index: 100;
-    background: rgba(12,11,10,0.85);
+    background: rgba(12,11,10,0.88);
     backdrop-filter: blur(18px);
     border-bottom: 1px solid var(--border);
     padding: 0 2rem;
@@ -69,8 +106,11 @@
     letter-spacing: 0.03em;
     cursor: pointer;
     text-decoration: none;
+    border: none; background: none;
+    font-family: var(--font-display);
   }
   .logo span { color: var(--text); }
+  .nav-right { display: flex; align-items: center; gap: 0.8rem; }
   .nav-tag {
     font-size: 0.7rem;
     font-weight: 500;
@@ -83,7 +123,27 @@
     border-radius: 99px;
   }
 
-  /* ── HERO ────────────────────────────────────── */
+  /* share toast */
+  #toast {
+    position: fixed;
+    bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    color: var(--text);
+    font-size: 0.82rem;
+    padding: 0.65rem 1.2rem;
+    border-radius: 99px;
+    z-index: 200;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  #toast.show {
+    opacity: 1; transform: translateX(-50%) translateY(0);
+  }
+
+  /* ── HERO ── */
   .hero {
     padding: 7rem 2rem 4rem;
     max-width: 900px;
@@ -108,12 +168,8 @@
     font-weight: 300;
     line-height: 1.12;
     margin-bottom: 1.2rem;
-    color: var(--text);
   }
-  .hero h1 em {
-    font-style: italic;
-    color: var(--amber);
-  }
+  .hero h1 em { font-style: italic; color: var(--amber); }
   .hero p {
     color: var(--text2);
     font-size: 1rem;
@@ -122,32 +178,17 @@
     margin: 0 auto 2.5rem;
     font-weight: 300;
   }
-  .hero-stats {
-    display: flex;
-    justify-content: center;
-    gap: 2.5rem;
-    margin-top: 1.5rem;
-  }
+  .hero-stats { display: flex; justify-content: center; gap: 2.5rem; }
   .stat { text-align: center; }
-  .stat-num {
-    font-family: var(--font-display);
-    font-size: 2rem;
-    font-weight: 600;
-    color: var(--amber);
-    display: block;
-  }
-  .stat-label {
-    font-size: 0.75rem;
-    color: var(--text3);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
+  .stat-num { font-family: var(--font-display); font-size: 2rem; font-weight: 600; color: var(--amber); display: block; }
+  .stat-label { font-size: 0.75rem; color: var(--text3); letter-spacing: 0.08em; text-transform: uppercase; }
 
-  /* ── SEARCH BAR ─────────────────────────────── */
+  /* ── SEARCH ── */
   .search-wrap {
     max-width: 540px;
     margin: 0 auto 3.5rem;
     position: relative;
+    padding: 0 2rem;
   }
   .search-wrap input {
     width: 100%;
@@ -162,79 +203,43 @@
     transition: border-color 0.2s, box-shadow 0.2s;
   }
   .search-wrap input::placeholder { color: var(--text3); }
-  .search-wrap input:focus {
-    border-color: var(--amber);
-    box-shadow: 0 0 0 3px var(--amber-dim);
-  }
-  .search-icon {
-    position: absolute;
-    left: 1rem; top: 50%;
-    transform: translateY(-50%);
-    color: var(--text3);
-    pointer-events: none;
-  }
+  .search-wrap input:focus { border-color: var(--amber); box-shadow: 0 0 0 3px var(--amber-dim); }
+  .search-icon { position: absolute; left: 2.8rem; top: 50%; transform: translateY(-50%); color: var(--text3); pointer-events: none; }
 
-  /* ── FILTER TABS ────────────────────────────── */
+  /* ── FILTERS ── */
   .filter-bar {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
+    display: flex; gap: 0.5rem; flex-wrap: wrap;
     justify-content: center;
     margin: 0 auto 3rem;
-    padding: 0 2rem;
-    max-width: 900px;
+    padding: 0 2rem; max-width: 900px;
   }
   .filter-btn {
     font-family: var(--font-body);
-    font-size: 0.78rem;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--text2);
-    background: transparent;
+    font-size: 0.78rem; font-weight: 500;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--text2); background: transparent;
     border: 1px solid var(--border);
-    padding: 6px 16px;
-    border-radius: 99px;
-    cursor: pointer;
+    padding: 6px 16px; border-radius: 99px; cursor: pointer;
     transition: all 0.2s;
   }
   .filter-btn:hover { border-color: var(--border2); color: var(--text); }
-  .filter-btn.active {
-    background: var(--amber-dim);
-    border-color: var(--amber);
-    color: var(--amber);
-  }
+  .filter-btn.active { background: var(--amber-dim); border-color: var(--amber); color: var(--amber); }
 
-  /* ── BOOK GRID ──────────────────────────────── */
-  .grid-container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 2rem 5rem;
-  }
+  /* ── BOOK GRID ── */
+  .grid-container { max-width: 1100px; margin: 0 auto; padding: 0 2rem 5rem; }
   .section-label {
-    font-size: 0.72rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--text3);
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--border);
+    font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--text3); margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem; border-bottom: 1px solid var(--border);
   }
-  .book-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1.5rem;
-  }
+  .book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem; }
+  .empty-state { text-align: center; padding: 4rem 2rem; color: var(--text3); font-size: 0.9rem; }
 
-  /* ── BOOK CARD ──────────────────────────────── */
+  /* ── BOOK CARD ── */
   .book-card {
-    cursor: pointer;
-    border-radius: var(--radius);
-    overflow: hidden;
-    background: var(--bg2);
-    border: 1px solid var(--border);
+    cursor: pointer; border-radius: var(--radius); overflow: hidden;
+    background: var(--bg2); border: 1px solid var(--border);
     transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
-    position: relative;
   }
   .book-card:hover {
     transform: translateY(-5px);
@@ -242,370 +247,175 @@
     box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 0 1px var(--amber);
   }
   .book-cover {
-    width: 100%;
-    aspect-ratio: 2/3;
-    display: flex;
-    align-items: flex-end;
-    padding: 1.2rem;
-    position: relative;
-    overflow: hidden;
+    width: 100%; aspect-ratio: 2/3;
+    display: flex; align-items: flex-end; padding: 1.2rem;
+    position: relative; overflow: hidden;
   }
-  .cover-bg {
-    position: absolute; inset: 0;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .cover-pattern {
-    width: 100%; height: 100%;
-    opacity: 0.15;
-  }
+  .cover-svg { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.15; }
   .book-badge {
-    position: absolute;
-    top: 0.8rem; right: 0.8rem;
-    font-size: 0.62rem;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 3px 9px;
-    border-radius: 99px;
-    z-index: 1;
+    position: absolute; top: 0.8rem; right: 0.8rem;
+    font-size: 0.62rem; font-weight: 500;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 3px 9px; border-radius: 99px; z-index: 1;
   }
   .badge-free { background: rgba(100,210,120,0.15); color: #64d278; border: 1px solid rgba(100,210,120,0.3); }
-  .badge-new { background: rgba(232,160,48,0.15); color: var(--amber); border: 1px solid var(--amber-dim); }
+  .badge-new  { background: rgba(232,160,48,0.15);  color: var(--amber); border: 1px solid var(--amber-dim); }
   .book-cover-title {
-    position: relative;
-    z-index: 1;
+    position: relative; z-index: 1;
     font-family: var(--font-display);
-    font-size: 1.1rem;
-    font-weight: 600;
-    line-height: 1.25;
-    color: white;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+    font-size: 1.05rem; font-weight: 600; line-height: 1.25;
+    color: white; text-shadow: 0 2px 8px rgba(0,0,0,0.8);
   }
-  .book-info {
-    padding: 1rem 1rem 1.1rem;
-    border-top: 1px solid var(--border);
-  }
+  .book-info { padding: 1rem 1rem 1.1rem; border-top: 1px solid var(--border); }
   .book-title-small {
-    font-family: var(--font-display);
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 0.25rem;
-    line-height: 1.3;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-family: var(--font-display); font-size: 0.95rem; font-weight: 600;
+    color: var(--text); margin-bottom: 0.25rem; line-height: 1.3;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .book-author {
-    font-size: 0.76rem;
-    color: var(--text2);
-    font-weight: 300;
-    margin-bottom: 0.65rem;
-  }
-  .book-meta {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
-  }
+  .book-author { font-size: 0.76rem; color: var(--text2); font-weight: 300; margin-bottom: 0.65rem; }
+  .book-meta { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
   .book-genre-tag {
-    font-size: 0.66rem;
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    color: var(--text3);
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    padding: 2px 8px;
-    border-radius: 4px;
+    font-size: 0.66rem; letter-spacing: 0.07em; text-transform: uppercase;
+    color: var(--text3); background: var(--bg3);
+    border: 1px solid var(--border); padding: 2px 8px; border-radius: 4px;
   }
-  .book-pages {
-    font-size: 0.72rem;
-    color: var(--text3);
-  }
+  .book-pages { font-size: 0.72rem; color: var(--text3); }
 
-  /* ── BOOK DETAIL PAGE ───────────────────────── */
+  /* ── DETAIL PAGE ── */
   .detail-header {
     background: linear-gradient(to bottom, var(--bg2), var(--bg));
     border-bottom: 1px solid var(--border);
     padding: 3rem 2rem 2rem;
   }
   .detail-inner {
-    max-width: 860px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 240px 1fr;
-    gap: 3rem;
-    align-items: start;
+    max-width: 860px; margin: 0 auto;
+    display: grid; grid-template-columns: 240px 1fr;
+    gap: 3rem; align-items: start;
   }
   .detail-cover {
-    border-radius: var(--radius);
-    overflow: hidden;
-    aspect-ratio: 2/3;
-    display: flex;
-    align-items: flex-end;
-    padding: 1.5rem;
-    position: relative;
+    border-radius: var(--radius); overflow: hidden;
+    aspect-ratio: 2/3; display: flex; align-items: flex-end;
+    padding: 1.5rem; position: relative;
     box-shadow: 0 30px 60px rgba(0,0,0,0.5);
   }
   .detail-cover-title {
-    position: relative;
-    z-index: 1;
-    font-family: var(--font-display);
-    font-size: 1.5rem;
-    font-weight: 600;
-    line-height: 1.2;
-    color: white;
-    text-shadow: 0 2px 12px rgba(0,0,0,0.9);
+    position: relative; z-index: 1;
+    font-family: var(--font-display); font-size: 1.5rem; font-weight: 600;
+    line-height: 1.2; color: white; text-shadow: 0 2px 12px rgba(0,0,0,0.9);
   }
   .detail-meta { padding-top: 0.5rem; }
   .back-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--text2);
-    font-size: 0.82rem;
-    font-weight: 400;
-    background: none;
-    border: none;
-    cursor: pointer;
-    margin-bottom: 1.5rem;
-    transition: color 0.2s;
-    font-family: var(--font-body);
-    padding: 0;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    color: var(--text2); font-size: 0.82rem; font-weight: 400;
+    background: none; border: none; cursor: pointer;
+    margin-bottom: 1.5rem; transition: color 0.2s;
+    font-family: var(--font-body); padding: 0;
   }
   .back-btn:hover { color: var(--amber); }
-  .detail-title {
-    font-family: var(--font-display);
-    font-size: 2.5rem;
-    font-weight: 300;
-    line-height: 1.15;
-    margin-bottom: 0.4rem;
-  }
-  .detail-author {
-    color: var(--amber);
-    font-size: 0.9rem;
-    font-weight: 400;
-    margin-bottom: 1.5rem;
-    letter-spacing: 0.04em;
-  }
-  .detail-tags {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    margin-bottom: 1.5rem;
-  }
+  .detail-title { font-family: var(--font-display); font-size: 2.5rem; font-weight: 300; line-height: 1.15; margin-bottom: 0.4rem; }
+  .detail-author { color: var(--amber); font-size: 0.9rem; font-weight: 400; margin-bottom: 1.5rem; letter-spacing: 0.04em; }
+  .detail-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
   .detail-tag {
-    font-size: 0.72rem;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 4px 12px;
-    border-radius: 99px;
-    background: var(--bg3);
-    border: 1px solid var(--border2);
-    color: var(--text2);
+    font-size: 0.72rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 4px 12px; border-radius: 99px; background: var(--bg3);
+    border: 1px solid var(--border2); color: var(--text2);
   }
   .detail-stats-row {
-    display: flex;
-    gap: 2rem;
-    margin-bottom: 1.5rem;
-    padding: 1rem 0;
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
+    display: flex; gap: 2rem; margin-bottom: 1.5rem;
+    padding: 1rem 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
   }
   .dstat { text-align: left; }
-  .dstat-val {
-    font-family: var(--font-display);
-    font-size: 1.4rem;
-    font-weight: 600;
-    color: var(--text);
-    display: block;
-  }
-  .dstat-key {
-    font-size: 0.7rem;
-    color: var(--text3);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-  .detail-desc {
-    font-size: 0.9rem;
-    color: var(--text2);
-    line-height: 1.8;
-    font-weight: 300;
-    margin-bottom: 2rem;
-  }
-  .download-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.75rem;
-    background: var(--amber);
-    color: #1a1200;
-    font-family: var(--font-body);
-    font-size: 0.9rem;
-    font-weight: 500;
-    padding: 0.85rem 2rem;
-    border-radius: 99px;
-    border: none;
-    cursor: pointer;
-    letter-spacing: 0.04em;
-    transition: all 0.2s;
-    text-decoration: none;
-  }
-  .download-btn:hover {
-    background: #f0b040;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px var(--amber-glow);
-  }
-  .detail-body {
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 2.5rem 2rem 4rem;
-  }
-  .detail-section-title {
-    font-family: var(--font-display);
-    font-size: 1.5rem;
-    font-weight: 400;
-    color: var(--text);
-    margin-bottom: 1rem;
-  }
+  .dstat-val { font-family: var(--font-display); font-size: 1.4rem; font-weight: 600; color: var(--text); display: block; }
+  .dstat-key { font-size: 0.7rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; }
+  .detail-desc { font-size: 0.9rem; color: var(--text2); line-height: 1.8; font-weight: 300; margin-bottom: 2rem; }
 
-  /* ── DOWNLOAD COUNTDOWN PAGE ────────────────── */
+  /* action buttons row */
+  .btn-row { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+  .download-btn {
+    display: inline-flex; align-items: center; gap: 0.75rem;
+    background: var(--amber); color: #1a1200;
+    font-family: var(--font-body); font-size: 0.9rem; font-weight: 500;
+    padding: 0.85rem 2rem; border-radius: 99px; border: none; cursor: pointer;
+    letter-spacing: 0.04em; transition: all 0.2s; text-decoration: none;
+  }
+  .download-btn:hover { background: #f0b040; transform: translateY(-2px); box-shadow: 0 8px 24px var(--amber-glow); }
+
+  /* share button */
+  .share-btn {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    background: transparent; color: var(--text2);
+    font-family: var(--font-body); font-size: 0.88rem; font-weight: 400;
+    padding: 0.82rem 1.4rem; border-radius: 99px;
+    border: 1px solid var(--border2); cursor: pointer;
+    letter-spacing: 0.03em; transition: all 0.2s;
+  }
+  .share-btn:hover { border-color: var(--amber); color: var(--amber); }
+
+  .detail-body { max-width: 860px; margin: 0 auto; padding: 2.5rem 2rem 4rem; }
+  .detail-section-title { font-family: var(--font-display); font-size: 1.5rem; font-weight: 400; margin-bottom: 1rem; }
+
+  /* ── URL DISPLAY ── */
+  .url-box {
+    display: flex; align-items: center; gap: 0.6rem;
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.55rem 0.8rem;
+    margin-bottom: 1.8rem;
+    max-width: 460px;
+  }
+  .url-box-icon { color: var(--text3); flex-shrink: 0; }
+  .url-box-text {
+    font-size: 0.73rem; color: var(--text3); font-family: monospace;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1;
+  }
+  .url-copy-btn {
+    font-size: 0.68rem; color: var(--amber);
+    background: var(--amber-dim); border: 1px solid var(--amber-dim);
+    padding: 3px 10px; border-radius: 4px; cursor: pointer;
+    white-space: nowrap; font-family: var(--font-body);
+    transition: all 0.15s; flex-shrink: 0;
+  }
+  .url-copy-btn:hover { background: var(--amber-glow); }
+
+  /* ── DOWNLOAD COUNTDOWN PAGE ── */
   .countdown-page {
     min-height: calc(100vh - 64px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
+    display: flex; align-items: center; justify-content: center; padding: 2rem;
   }
-  .countdown-card {
-    max-width: 500px;
-    width: 100%;
-    text-align: center;
-  }
-  .countdown-ring {
-    width: 160px;
-    height: 160px;
-    margin: 0 auto 2.5rem;
-    position: relative;
-  }
-  .countdown-ring svg {
-    width: 100%;
-    height: 100%;
-    transform: rotate(-90deg);
-  }
-  .ring-track {
-    fill: none;
-    stroke: var(--bg3);
-    stroke-width: 6;
-  }
+  .countdown-card { max-width: 480px; width: 100%; text-align: center; }
+  .countdown-ring { width: 160px; height: 160px; margin: 0 auto 2.5rem; position: relative; }
+  .countdown-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .ring-track  { fill: none; stroke: var(--bg3); stroke-width: 6; }
   .ring-progress {
-    fill: none;
-    stroke: var(--amber);
-    stroke-width: 6;
-    stroke-linecap: round;
-    stroke-dasharray: 408;
-    stroke-dashoffset: 0;
+    fill: none; stroke: var(--amber); stroke-width: 6;
+    stroke-linecap: round; stroke-dasharray: 408; stroke-dashoffset: 0;
     transition: stroke-dashoffset 1s linear;
   }
   .ring-num {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 2px;
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 2px;
   }
-  .ring-number {
-    font-family: var(--font-display);
-    font-size: 3rem;
-    font-weight: 300;
-    color: var(--text);
-    line-height: 1;
+  .ring-number { font-family: var(--font-display); font-size: 3rem; font-weight: 300; color: var(--text); line-height: 1; }
+  .ring-label { font-size: 0.65rem; color: var(--text3); letter-spacing: 0.15em; text-transform: uppercase; }
+  .cd-cover-mini {
+    width: 80px; height: 120px; border-radius: 6px;
+    margin: 0 auto 1.5rem; overflow: hidden;
+    position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
   }
-  .ring-label {
-    font-size: 0.65rem;
-    color: var(--text3);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-  }
-  .cd-book-cover {
-    width: 80px;
-    height: 120px;
-    border-radius: 6px;
-    margin: 0 auto 1.5rem;
-    overflow: hidden;
-    position: relative;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  }
-  .cd-title {
-    font-family: var(--font-display);
-    font-size: 1.8rem;
-    font-weight: 300;
-    margin-bottom: 0.3rem;
-  }
-  .cd-author {
-    font-size: 0.82rem;
-    color: var(--amber);
-    margin-bottom: 2rem;
-    letter-spacing: 0.04em;
-  }
-  .cd-message {
-    font-size: 0.85rem;
-    color: var(--text2);
-    line-height: 1.7;
-    font-weight: 300;
-    margin-bottom: 2rem;
-  }
-  .cd-progress-bar {
-    width: 100%;
-    height: 3px;
-    background: var(--bg3);
-    border-radius: 99px;
-    margin-bottom: 2rem;
-    overflow: hidden;
-  }
-  .cd-progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--amber), #f0c060);
-    border-radius: 99px;
-    width: 100%;
-    transform-origin: left;
-    transition: transform 1s linear;
-  }
-  .cd-cancel-btn {
-    font-size: 0.8rem;
-    color: var(--text3);
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-family: var(--font-body);
-    transition: color 0.2s;
-    padding: 0;
-  }
+  .cd-title  { font-family: var(--font-display); font-size: 1.8rem; font-weight: 300; margin-bottom: 0.3rem; }
+  .cd-author { font-size: 0.82rem; color: var(--amber); margin-bottom: 2rem; letter-spacing: 0.04em; }
+  .cd-message { font-size: 0.85rem; color: var(--text2); line-height: 1.7; font-weight: 300; margin-bottom: 2rem; }
+  .cd-progress-bar { width: 100%; height: 3px; background: var(--bg3); border-radius: 99px; margin-bottom: 2rem; overflow: hidden; }
+  .cd-progress-fill { height: 100%; background: linear-gradient(90deg, var(--amber), #f0c060); border-radius: 99px; width: 100%; transform-origin: left; transition: transform 1s linear; }
+  .cd-cancel-btn { font-size: 0.8rem; color: var(--text3); background: none; border: none; cursor: pointer; font-family: var(--font-body); transition: color 0.2s; padding: 0; }
   .cd-cancel-btn:hover { color: var(--text2); }
-  .cd-redirect-msg {
-    display: none;
-    padding: 1rem 1.5rem;
-    background: rgba(100,210,120,0.1);
-    border: 1px solid rgba(100,210,120,0.2);
-    border-radius: var(--radius-sm);
-    font-size: 0.85rem;
-    color: #64d278;
-    margin-bottom: 1rem;
-  }
+  .cd-ready { display: none; padding: 1rem 1.5rem; background: rgba(100,210,120,0.1); border: 1px solid rgba(100,210,120,0.2); border-radius: var(--radius-sm); font-size: 0.85rem; color: #64d278; margin-bottom: 1.2rem; }
 
-  /* ── FOOTER ─────────────────────────────────── */
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 2rem;
-    text-align: center;
-    font-size: 0.78rem;
-    color: var(--text3);
-  }
+  /* ── FOOTER ── */
+  footer { border-top: 1px solid var(--border); padding: 2rem; text-align: center; font-size: 0.78rem; color: var(--text3); position: relative; z-index: 1; }
   footer a { color: var(--amber); text-decoration: none; }
 
-  /* ── RESPONSIVE ─────────────────────────────── */
   @media (max-width: 640px) {
     .detail-inner { grid-template-columns: 1fr; }
     .detail-cover { max-width: 200px; }
@@ -617,70 +427,89 @@
 </head>
 <body>
 
-<!-- ═══════ NAV ═══════════════════════════════════ -->
+<!-- Loading screen -->
+<div id="loading">
+  <div class="loader-logo">Page<span>Vault</span></div>
+  <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+</div>
+
+<!-- Toast notification -->
+<div id="toast"></div>
+
+<!-- ═══════ NAV ═══════════════════════════ -->
 <nav>
-  <a class="logo" onclick="showPage('home')" style="cursor:pointer;text-decoration:none;">Page<span>Vault</span></a>
-  <span class="nav-tag">Free Library</span>
+  <button class="logo" onclick="navigate('/')">Page<span>Vault</span></button>
+  <div class="nav-right">
+    <span class="nav-tag">Free Library</span>
+  </div>
 </nav>
 
-<!-- ═══════ HOME PAGE ════════════════════════════ -->
+<!-- ═══════ HOME PAGE ════════════════════ -->
 <div id="page-home" class="page active">
   <div class="hero">
     <span class="hero-eyebrow">✦ Curated Digital Library</span>
     <h1>Read Without<br><em>Limits.</em></h1>
     <p>Thousands of free books, neatly organized and ready to download. No sign-up, no fees — just pure reading.</p>
     <div class="hero-stats">
-      <div class="stat"><span class="stat-num">500+</span><span class="stat-label">Books</span></div>
-      <div class="stat"><span class="stat-num">18</span><span class="stat-label">Genres</span></div>
+      <div class="stat"><span class="stat-num" id="stat-total">—</span><span class="stat-label">Books</span></div>
+      <div class="stat"><span class="stat-num" id="stat-genres">—</span><span class="stat-label">Genres</span></div>
       <div class="stat"><span class="stat-num">Free</span><span class="stat-label">Forever</span></div>
     </div>
   </div>
 
-  <div class="search-wrap" style="padding:0 2rem;">
+  <div class="search-wrap">
     <svg class="search-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     <input type="text" id="search-input" placeholder="Search by title, author, or genre…" oninput="filterBooks()" />
   </div>
 
-  <div class="filter-bar">
-    <button class="filter-btn active" onclick="setFilter('All',this)">All</button>
-    <button class="filter-btn" onclick="setFilter('Self-Help',this)">Self-Help</button>
-    <button class="filter-btn" onclick="setFilter('Business',this)">Business</button>
-    <button class="filter-btn" onclick="setFilter('Philosophy',this)">Philosophy</button>
-    <button class="filter-btn" onclick="setFilter('Science',this)">Science</button>
-    <button class="filter-btn" onclick="setFilter('Biography',this)">Biography</button>
-    <button class="filter-btn" onclick="setFilter('Psychology',this)">Psychology</button>
+  <div class="filter-bar" id="filter-bar">
+    <button class="filter-btn active" onclick="setFilter('All', this)">All</button>
   </div>
 
   <div class="grid-container">
-    <div class="section-label" id="books-count">Showing all books</div>
+    <div class="section-label" id="books-count">Loading…</div>
     <div class="book-grid" id="book-grid"></div>
   </div>
 </div>
 
-<!-- ═══════ DETAIL PAGE ══════════════════════════ -->
+<!-- ═══════ DETAIL PAGE ══════════════════ -->
 <div id="page-detail" class="page">
   <div class="detail-header">
     <div class="detail-inner">
       <div id="detail-cover" class="detail-cover"></div>
       <div class="detail-meta">
-        <button class="back-btn" onclick="showPage('home')">
+        <button class="back-btn" onclick="navigate('/')">
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
           Back to Library
         </button>
+
+        <!-- Shareable URL box -->
+        <div class="url-box" id="url-box">
+          <svg class="url-box-icon" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          <span class="url-box-text" id="url-display"></span>
+          <button class="url-copy-btn" onclick="copyBookLink()">Copy link</button>
+        </div>
+
         <h1 class="detail-title" id="detail-title"></h1>
         <div class="detail-author" id="detail-author"></div>
         <div class="detail-tags" id="detail-tags"></div>
         <div class="detail-stats-row">
           <div class="dstat"><span class="dstat-val" id="d-pages"></span><span class="dstat-key">Pages</span></div>
-          <div class="dstat"><span class="dstat-val" id="d-year"></span><span class="dstat-key">Year</span></div>
-          <div class="dstat"><span class="dstat-val" id="d-lang"></span><span class="dstat-key">Language</span></div>
+          <div class="dstat"><span class="dstat-val" id="d-year"></span> <span class="dstat-key">Year</span></div>
+          <div class="dstat"><span class="dstat-val" id="d-lang"></span> <span class="dstat-key">Language</span></div>
           <div class="dstat"><span class="dstat-val" id="d-format"></span><span class="dstat-key">Format</span></div>
         </div>
         <p class="detail-desc" id="detail-desc"></p>
-        <button class="download-btn" id="go-download-btn">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Download Free PDF
-        </button>
+        <div class="btn-row">
+          <button class="download-btn" id="go-download-btn">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Free PDF
+          </button>
+          <button class="share-btn" onclick="shareBook()">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            Share
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -690,204 +519,135 @@
   </div>
 </div>
 
-<!-- ═══════ DOWNLOAD / COUNTDOWN PAGE ═══════════ -->
+<!-- ═══════ DOWNLOAD PAGE ════════════════ -->
 <div id="page-download" class="page">
   <div class="countdown-page">
     <div class="countdown-card">
-      <div id="cd-cover-mini" class="cd-book-cover"></div>
-      <h2 class="cd-title" id="cd-title"></h2>
-      <p class="cd-author" id="cd-author"></p>
+      <div class="cd-cover-mini" id="cd-cover"></div>
+      <h2 class="cd-title"  id="cd-title"></h2>
+      <p class="cd-author"  id="cd-author"></p>
       <div class="countdown-ring">
         <svg viewBox="0 0 140 140">
-          <circle class="ring-track" cx="70" cy="70" r="65"/>
-          <circle class="ring-progress" id="ring" cx="70" cy="70" r="65"/>
+          <circle class="ring-track"    cx="70" cy="70" r="65"/>
+          <circle class="ring-progress" cx="70" cy="70" r="65" id="ring"/>
         </svg>
         <div class="ring-num">
           <span class="ring-number" id="ring-number">15</span>
           <span class="ring-label">seconds</span>
         </div>
       </div>
-      <p class="cd-message">Your download is being prepared.<br>You will be redirected automatically in <strong id="cd-sec">15</strong> seconds.</p>
-      <div class="cd-progress-bar">
-        <div class="cd-progress-fill" id="cd-bar" style="transform:scaleX(1)"></div>
-      </div>
-      <div class="cd-redirect-msg" id="cd-ready">
-        ✓ Ready! Redirecting you to your download now…
-      </div>
-      <button class="cd-cancel-btn" onclick="goToDetail()">← Back to book page</button>
+      <p class="cd-message">Your download is being prepared.<br>You'll be redirected in <strong id="cd-sec">15</strong> seconds.</p>
+      <div class="cd-progress-bar"><div class="cd-progress-fill" id="cd-bar"></div></div>
+      <div class="cd-ready" id="cd-ready">✓ Ready! Redirecting to your download…</div>
+      <button class="cd-cancel-btn" onclick="goBack()">← Back to book page</button>
     </div>
   </div>
 </div>
 
-<!-- ═══════ FOOTER ════════════════════════════════ -->
+<!-- ═══════ FOOTER ════════════════════════ -->
 <footer>
-  <p>© 2025 PageVault — All books are provided for free educational use. <a href="#">Contact</a> · <a href="#">DMCA</a> · <a href="#">Privacy</a></p>
+  <p>© 2025 PageVault — All books are provided for free educational use.
+    <a href="#">Contact</a> · <a href="#">DMCA</a> · <a href="#">Privacy</a>
+  </p>
 </footer>
 
 <script>
-// ── BOOK DATA ─────────────────────────────────────
-const BOOKS = [
-  {
-    id: 1,
-    title: "Atomic Habits",
-    author: "James Clear",
-    genre: "Self-Help",
-    pages: 320, year: 2018, lang: "EN", format: "PDF",
-    badge: "new",
-    color1: "#1a3a2a", color2: "#0d2016",
-    desc: "Tiny changes, remarkable results. A groundbreaking guide to building good habits and breaking bad ones through small, incremental improvements.",
-    longDesc: "No matter your goals, Atomic Habits offers a proven framework for improving every day. James Clear, one of the world's leading experts on habit formation, reveals practical strategies that will teach you exactly how to form good habits, break bad ones, and master the tiny behaviors that lead to remarkable results. If you're having trouble changing your habits, the problem isn't you. The problem is your system.",
-    link: "https://example.com/atomic-habits.pdf"
-  },
-  {
-    id: 2,
-    title: "Thinking, Fast and Slow",
-    author: "Daniel Kahneman",
-    genre: "Psychology",
-    pages: 499, year: 2011, lang: "EN", format: "PDF",
-    badge: "free",
-    color1: "#1a1a3a", color2: "#0d0d22",
-    desc: "A landmark book exploring the two systems of the mind — the fast, intuitive System 1 and the slow, deliberate System 2.",
-    longDesc: "In this international bestseller, Nobel laureate Daniel Kahneman explains the two systems that drive the way we think. System 1 is fast, intuitive, and emotional; System 2 is slower, more deliberative, and more logical. Kahneman reveals the extraordinary capabilities and faults and biases of fast thinking, and reveals the pervasive influence of intuitive impressions on our thoughts and behavior.",
-    link: "https://example.com/thinking-fast-slow.pdf"
-  },
-  {
-    id: 3,
-    title: "The Lean Startup",
-    author: "Eric Ries",
-    genre: "Business",
-    pages: 336, year: 2011, lang: "EN", format: "PDF",
-    badge: "free",
-    color1: "#3a1a10", color2: "#200e08",
-    desc: "How today's entrepreneurs use continuous innovation to create radically successful businesses through validated learning.",
-    longDesc: "Most startups fail. But many of those failures are preventable. The Lean Startup is a new approach being adopted across the globe, changing the way companies are built and new products are launched. Eric Ries defines a startup as an organization dedicated to creating something new under conditions of extreme uncertainty.",
-    link: "https://example.com/lean-startup.pdf"
-  },
-  {
-    id: 4,
-    title: "Sapiens",
-    author: "Yuval Noah Harari",
-    genre: "Science",
-    pages: 443, year: 2015, lang: "EN", format: "PDF",
-    badge: "new",
-    color1: "#2a1a00", color2: "#1a1000",
-    desc: "A brief history of humankind — from the Stone Age to the 21st century, exploring how biology and history have defined us.",
-    longDesc: "100,000 years ago, at least six human species inhabited the earth. Today there is just one. Us. How did our species succeed in the battle for dominance? Why did our foraging ancestors come together to create cities and kingdoms? How did we come to believe in gods, nations and human rights; to trust money, books and laws; and to be enslaved by bureaucracy, timetables and consumerism?",
-    link: "https://example.com/sapiens.pdf"
-  },
-  {
-    id: 5,
-    title: "Deep Work",
-    author: "Cal Newport",
-    genre: "Self-Help",
-    pages: 296, year: 2016, lang: "EN", format: "PDF",
-    badge: "free",
-    color1: "#0a1a2a", color2: "#05101a",
-    desc: "Rules for focused success in a distracted world — the ability to focus without distraction is becoming increasingly rare and valuable.",
-    longDesc: "Deep work is the ability to focus without distraction on a cognitively demanding task. It's a skill that allows you to quickly master complicated information and produce better results in less time. Deep Work will make you better at what you do and provide the sense of true fulfillment that comes from craftsmanship. In short, deep work is like a superpower in our increasingly competitive twenty-first century economy.",
-    link: "https://example.com/deep-work.pdf"
-  },
-  {
-    id: 6,
-    title: "Man's Search for Meaning",
-    author: "Viktor E. Frankl",
-    genre: "Philosophy",
-    pages: 200, year: 1946, lang: "EN", format: "PDF",
-    badge: "free",
-    color1: "#1a0a0a", color2: "#0d0505",
-    desc: "A psychiatrist's memoir of surviving Nazi death camps and his discovery of logotherapy — the search for meaning as the primary human drive.",
-    longDesc: "Psychiatrist Viktor Frankl's memoir has riveted generations of readers with its descriptions of life in Nazi death camps and its lessons for spiritual survival. Between 1942 and 1945 Frankl labored in four different camps, including Auschwitz, while his parents, brother, and pregnant wife perished. Based on his own experience and the experiences of those he treated in his practice, Frankl argues that we cannot avoid suffering but we can choose how to cope with it, find meaning in it, and move forward with renewed purpose.",
-    link: "https://example.com/mans-search-for-meaning.pdf"
-  },
-  {
-    id: 7,
-    title: "Zero to One",
-    author: "Peter Thiel",
-    genre: "Business",
-    pages: 224, year: 2014, lang: "EN", format: "PDF",
-    badge: "new",
-    color1: "#0a2a1a", color2: "#05180f",
-    desc: "Notes on startups, or how to build the future. Every moment in business happens only once — the next Bill Gates will not build an operating system.",
-    longDesc: "The great secret of our time is that there are still uncharted frontiers to explore and new inventions to create. In Zero to One, legendary entrepreneur and investor Peter Thiel shows how we can find singular ways to create those new things. Thiel begins with the contrarian premise that we live in an age of technological stagnation, even if we're too distracted by shiny mobile devices to notice.",
-    link: "https://example.com/zero-to-one.pdf"
-  },
-  {
-    id: 8,
-    title: "The Power of Now",
-    author: "Eckhart Tolle",
-    genre: "Philosophy",
-    pages: 236, year: 1997, lang: "EN", format: "PDF",
-    badge: "free",
-    color1: "#1a150a", color2: "#100c05",
-    desc: "A guide to spiritual enlightenment, teaching the importance of living in the present moment and transcending thoughts of the past and future.",
-    longDesc: "The Power of Now is a guide to spiritual enlightenment. Tolle's message is simple: living in the now is the truest path to happiness and enlightenment. Beneath the seemingly complex and contradictory drama of our lives lies the simple fact that we are all searching for wholeness — something we feel is missing in our lives. Tolle shows that our unhappiness is caused by our identification with our minds.",
-    link: "https://example.com/power-of-now.pdf"
-  },
-  {
-    id: 9,
-    title: "Steve Jobs",
-    author: "Walter Isaacson",
-    genre: "Biography",
-    pages: 656, year: 2011, lang: "EN", format: "PDF",
-    badge: "new",
-    color1: "#1a1a1a", color2: "#0d0d0d",
-    desc: "The exclusive biography based on over forty interviews with Steve Jobs — an intimate portrait of the creative entrepreneur.",
-    longDesc: "Based on more than forty interviews with Jobs conducted over two years—as well as interviews with more than a hundred family members, friends, adversaries, competitors, and colleagues—Walter Isaacson has written a riveting story of the roller-coaster life and searingly intense personality of a creative entrepreneur whose passion for perfection and ferocious drive revolutionized six industries.",
-    link: "https://example.com/steve-jobs.pdf"
-  },
-  {
-    id: 10,
-    title: "The 7 Habits",
-    author: "Stephen Covey",
-    genre: "Self-Help",
-    pages: 432, year: 1989, lang: "EN", format: "PDF",
-    badge: "free",
-    color1: "#2a0a1a", color2: "#1a0510",
-    desc: "Highly effective people share a commitment to principles — a framework for personal and professional effectiveness that has inspired millions.",
-    longDesc: "Stephen Covey's 7 Habits of Highly Effective People has captivated readers for 25 years. It has transformed the lives of Presidents and CEOs, educators and parents — in short, millions of people of all ages and occupations. With penetrating insights and pointed anecdotes, Covey reveals a step-by-step pathway for living with fairness, integrity, honesty, and human dignity.",
-    link: "https://example.com/7-habits.pdf"
-  },
-  {
-    id: 11,
-    title: "Influence",
-    author: "Robert Cialdini",
-    genre: "Psychology",
-    pages: 320, year: 1984, lang: "EN", format: "PDF",
-    badge: "free",
-    color1: "#1a2a0a", color2: "#101a05",
-    desc: "The classic book on persuasion, explaining the six principles of influence and how they shape our decisions and behaviors.",
-    longDesc: "Dr. Robert Cialdini—the seminal expert in the rapidly expanding field of influence and persuasion—explains the psychology of why people say yes and how to apply these understandings. You'll learn the six universal principles, how to use them to become a skilled persuader—and how to defend yourself against them.",
-    link: "https://example.com/influence.pdf"
-  },
-  {
-    id: 12,
-    title: "A Brief History of Time",
-    author: "Stephen Hawking",
-    genre: "Science",
-    pages: 212, year: 1988, lang: "EN", format: "PDF",
-    badge: "free",
-    color1: "#0a0a2a", color2: "#050518",
-    desc: "An accessible account of cosmology, time, and the universe — a landmark work that made complex physics comprehensible to general readers.",
-    longDesc: "Was there a beginning of time? Could time run backwards? Is the universe infinite or does it have boundaries? These are just some of the questions considered in an internationally acclaimed masterpiece by the world's renowned physicist. Starting from basic ideas of space and time, Stephen Hawking goes on to explain black holes, the big bang, the nature of time, and a unification of physics.",
-    link: "https://example.com/brief-history-of-time.pdf"
-  }
-];
-
-let currentBook = null;
-let countdownTimer = null;
+// ─────────────────────────────────────────
+//  STATE
+// ─────────────────────────────────────────
+let BOOKS        = [];
+let currentBook  = null;
 let activeFilter = 'All';
+let countdownTimer = null;
 
-// ── RENDER BOOKS ──────────────────────────────────
+// ─────────────────────────────────────────
+//  LOAD DATA.JSON
+// ─────────────────────────────────────────
+async function loadData() {
+  try {
+    const res  = await fetch('./data.json');
+    const json = await res.json();
+    BOOKS = json.books;
+  } catch (e) {
+    console.error('Could not load data.json', e);
+    BOOKS = [];
+  }
+  init();
+}
+
+function init() {
+  buildFilterBar();
+  renderBooks(BOOKS);
+  updateStats();
+  hideLoader();
+  handleRoute();                        // parse URL on first load
+}
+
+// ─────────────────────────────────────────
+//  LOADER
+// ─────────────────────────────────────────
+function hideLoader() {
+  const el = document.getElementById('loading');
+  el.classList.add('hidden');
+  setTimeout(() => el.remove(), 500);
+}
+
+// ─────────────────────────────────────────
+//  STATS
+// ─────────────────────────────────────────
+function updateStats() {
+  document.getElementById('stat-total').textContent   = BOOKS.length + '+';
+  const genres = [...new Set(BOOKS.map(b => b.genre))];
+  document.getElementById('stat-genres').textContent  = genres.length;
+}
+
+// ─────────────────────────────────────────
+//  FILTER BAR (built from data)
+// ─────────────────────────────────────────
+function buildFilterBar() {
+  const genres = ['All', ...new Set(BOOKS.map(b => b.genre))];
+  const bar = document.getElementById('filter-bar');
+  bar.innerHTML = genres.map(g =>
+    `<button class="filter-btn${g === 'All' ? ' active' : ''}" onclick="setFilter('${g}',this)">${g}</button>`
+  ).join('');
+}
+
+function setFilter(genre, btn) {
+  activeFilter = genre;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterBooks();
+}
+
+function filterBooks() {
+  const q = document.getElementById('search-input').value.toLowerCase();
+  const filtered = BOOKS.filter(b => {
+    const matchGenre  = activeFilter === 'All' || b.genre === activeFilter;
+    const matchSearch = !q || b.title.toLowerCase().includes(q)
+                           || b.author.toLowerCase().includes(q)
+                           || b.genre.toLowerCase().includes(q);
+    return matchGenre && matchSearch;
+  });
+  renderBooks(filtered);
+}
+
+// ─────────────────────────────────────────
+//  RENDER GRID
+// ─────────────────────────────────────────
 function renderBooks(books) {
   const grid = document.getElementById('book-grid');
-  const cnt = document.getElementById('books-count');
+  const cnt  = document.getElementById('books-count');
   cnt.textContent = `Showing ${books.length} book${books.length !== 1 ? 's' : ''}`;
+
+  if (!books.length) {
+    grid.innerHTML = '<div class="empty-state">No books found. Try a different search.</div>';
+    return;
+  }
+
   grid.innerHTML = books.map(b => `
-    <div class="book-card" onclick="showDetail(${b.id})">
-      <div class="book-cover" style="background: linear-gradient(160deg, ${b.color1}, ${b.color2});">
-        <svg class="cover-pattern" viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg">
-          ${generatePattern(b.id)}
-        </svg>
+    <div class="book-card" onclick="navigate('/book/${b.slug}')">
+      <div class="book-cover" style="background:linear-gradient(160deg,${b.color1},${b.color2})">
+        <svg class="cover-svg" viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg">${coverPattern(b.id)}</svg>
         <span class="book-badge badge-${b.badge}">${b.badge === 'new' ? '⚡ New' : '✓ Free'}</span>
         <span class="book-cover-title">${b.title}</span>
       </div>
@@ -903,89 +663,150 @@ function renderBooks(books) {
   `).join('');
 }
 
-function generatePattern(seed) {
-  const shapes = [];
-  const r = (n) => (seed * 137 + n * 31) % 200;
-  const r2 = (n) => (seed * 97 + n * 53) % 300;
-  for (let i = 0; i < 6; i++) {
-    shapes.push(`<circle cx="${r(i)}" cy="${r2(i)}" r="${20 + (seed + i) % 40}" fill="white"/>`);
+function coverPattern(seed) {
+  return Array.from({length: 6}, (_, i) =>
+    `<circle cx="${(seed*137+i*31)%200}" cy="${(seed*97+i*53)%300}" r="${20+(seed+i)%40}" fill="white"/>`
+  ).join('');
+}
+
+// ─────────────────────────────────────────
+//  ROUTING  (hash-based)
+//  /          → home
+//  /book/:slug → detail
+//  /download/:slug → countdown
+// ─────────────────────────────────────────
+function navigate(path) {
+  window.location.hash = '#' + path;
+}
+
+function handleRoute() {
+  const hash = window.location.hash.replace('#', '') || '/';
+  const parts = hash.split('/').filter(Boolean);  // ['book','sapiens'] etc.
+
+  if (parts[0] === 'book' && parts[1]) {
+    const book = BOOKS.find(b => b.slug === parts[1]);
+    if (book) { showDetail(book); return; }
   }
-  return shapes.join('');
+  if (parts[0] === 'download' && parts[1]) {
+    const book = BOOKS.find(b => b.slug === parts[1]);
+    if (book) { showCountdown(book); return; }
+  }
+  showHome();
 }
 
-// ── FILTER ────────────────────────────────────────
-function setFilter(genre, btn) {
-  activeFilter = genre;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  filterBooks();
-}
+window.addEventListener('hashchange', handleRoute);
 
-function filterBooks() {
-  const q = document.getElementById('search-input').value.toLowerCase();
-  const filtered = BOOKS.filter(b => {
-    const matchGenre = activeFilter === 'All' || b.genre === activeFilter;
-    const matchSearch = !q || b.title.toLowerCase().includes(q) || b.author.toLowerCase().includes(q) || b.genre.toLowerCase().includes(q);
-    return matchGenre && matchSearch;
-  });
-  renderBooks(filtered);
-}
-
-// ── PAGES ─────────────────────────────────────────
-function showPage(id) {
+// ─────────────────────────────────────────
+//  PAGES
+// ─────────────────────────────────────────
+function showHome() {
+  clearCountdown();
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + id).classList.add('active');
+  document.getElementById('page-home').classList.add('active');
   window.scrollTo(0, 0);
-  if (id !== 'download') clearCountdown();
+  document.title = 'PageVault — Free Book Library';
 }
 
-// ── DETAIL ────────────────────────────────────────
-function showDetail(id) {
-  const b = BOOKS.find(x => x.id === id);
-  currentBook = b;
-  document.getElementById('detail-cover').style.background = `linear-gradient(160deg, ${b.color1}, ${b.color2})`;
-  document.getElementById('detail-cover').innerHTML = `
-    <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.15" viewBox="0 0 200 300">${generatePattern(b.id)}</svg>
-    <span class="detail-cover-title">${b.title}</span>
+function showDetail(book) {
+  clearCountdown();
+  currentBook = book;
+
+  // Fill cover
+  const coverEl = document.getElementById('detail-cover');
+  coverEl.style.background = `linear-gradient(160deg,${book.color1},${book.color2})`;
+  coverEl.innerHTML = `
+    <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.15" viewBox="0 0 200 300">${coverPattern(book.id)}</svg>
+    <span class="detail-cover-title">${book.title}</span>
   `;
-  document.getElementById('detail-title').textContent = b.title;
-  document.getElementById('detail-author').textContent = 'by ' + b.author;
-  document.getElementById('detail-tags').innerHTML = [b.genre, b.format, b.lang].map(t => `<span class="detail-tag">${t}</span>`).join('');
-  document.getElementById('d-pages').textContent = b.pages;
-  document.getElementById('d-year').textContent = b.year;
-  document.getElementById('d-lang').textContent = b.lang;
-  document.getElementById('d-format').textContent = b.format;
-  document.getElementById('detail-desc').textContent = b.desc;
-  document.getElementById('detail-long-desc').textContent = b.longDesc;
-  document.getElementById('go-download-btn').onclick = () => startDownload(b.id);
-  showPage('detail');
+
+  // Fill info
+  document.getElementById('detail-title').textContent    = book.title;
+  document.getElementById('detail-author').textContent   = 'by ' + book.author;
+  document.getElementById('detail-tags').innerHTML       = [book.genre, book.format, book.lang]
+    .map(t => `<span class="detail-tag">${t}</span>`).join('');
+  document.getElementById('d-pages').textContent  = book.pages;
+  document.getElementById('d-year').textContent   = book.year;
+  document.getElementById('d-lang').textContent   = book.lang;
+  document.getElementById('d-format').textContent = book.format;
+  document.getElementById('detail-desc').textContent      = book.desc;
+  document.getElementById('detail-long-desc').textContent = book.longDesc;
+
+  // Shareable URL display
+  const bookUrl = window.location.origin + window.location.pathname + '#/book/' + book.slug;
+  document.getElementById('url-display').textContent = bookUrl;
+
+  // Download button
+  document.getElementById('go-download-btn').onclick = () => navigate('/download/' + book.slug);
+
+  // Switch page
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-detail').classList.add('active');
+  window.scrollTo(0, 0);
+  document.title = `${book.title} — PageVault`;
 }
 
-// ── COUNTDOWN ─────────────────────────────────────
-function startDownload(id) {
-  const b = BOOKS.find(x => x.id === id);
-  currentBook = b;
-  document.getElementById('cd-cover-mini').style.background = `linear-gradient(160deg, ${b.color1}, ${b.color2})`;
-  document.getElementById('cd-cover-mini').innerHTML = `<svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.2" viewBox="0 0 200 300">${generatePattern(b.id)}</svg>`;
-  document.getElementById('cd-title').textContent = b.title;
-  document.getElementById('cd-author').textContent = b.author;
-  showPage('download');
-  runCountdown(b.link);
+// ─────────────────────────────────────────
+//  SHARE / COPY
+// ─────────────────────────────────────────
+function copyBookLink() {
+  if (!currentBook) return;
+  const url = window.location.origin + window.location.pathname + '#/book/' + currentBook.slug;
+  navigator.clipboard.writeText(url).then(() => showToast('Link copied to clipboard ✓'));
+}
+
+function shareBook() {
+  if (!currentBook) return;
+  const url   = window.location.origin + window.location.pathname + '#/book/' + currentBook.slug;
+  const title = currentBook.title + ' — PageVault';
+  if (navigator.share) {
+    navigator.share({ title, url });
+  } else {
+    navigator.clipboard.writeText(url).then(() => showToast('Link copied to clipboard ✓'));
+  }
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ─────────────────────────────────────────
+//  COUNTDOWN
+// ─────────────────────────────────────────
+function showCountdown(book) {
+  currentBook = book;
+
+  // Mini cover
+  const mini = document.getElementById('cd-cover');
+  mini.style.background = `linear-gradient(160deg,${book.color1},${book.color2})`;
+  mini.innerHTML = `<svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.2" viewBox="0 0 200 300">${coverPattern(book.id)}</svg>`;
+
+  document.getElementById('cd-title').textContent  = book.title;
+  document.getElementById('cd-author').textContent = book.author;
+
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-download').classList.add('active');
+  window.scrollTo(0, 0);
+  document.title = `Downloading ${book.title} — PageVault`;
+
+  runCountdown(book.link);
 }
 
 function runCountdown(link) {
   clearCountdown();
   let seconds = 15;
-  const ringEl = document.getElementById('ring');
-  const numEl = document.getElementById('ring-number');
-  const secEl = document.getElementById('cd-sec');
-  const barEl = document.getElementById('cd-bar');
+  const ring    = document.getElementById('ring');
+  const numEl   = document.getElementById('ring-number');
+  const secEl   = document.getElementById('cd-sec');
+  const barEl   = document.getElementById('cd-bar');
   const readyEl = document.getElementById('cd-ready');
-  const circumference = 408;
+  const C       = 408; // circumference (2π×65)
 
-  readyEl.style.display = 'none';
-  ringEl.style.strokeDashoffset = 0;
-  barEl.style.transform = 'scaleX(1)';
+  readyEl.style.display      = 'none';
+  ring.style.strokeDashoffset = 0;
+  barEl.style.transform       = 'scaleX(1)';
   numEl.textContent = seconds;
   secEl.textContent = seconds;
 
@@ -993,14 +814,14 @@ function runCountdown(link) {
     seconds--;
     numEl.textContent = seconds;
     secEl.textContent = seconds;
-    const progress = seconds / 15;
-    ringEl.style.strokeDashoffset = circumference * (1 - progress);
-    barEl.style.transform = `scaleX(${progress})`;
+    const pct = seconds / 15;
+    ring.style.strokeDashoffset = C * (1 - pct);
+    barEl.style.transform       = `scaleX(${pct})`;
 
     if (seconds <= 0) {
       clearCountdown();
       readyEl.style.display = 'block';
-      setTimeout(() => { window.open(link, '_blank'); }, 500);
+      setTimeout(() => window.open(link, '_blank'), 500);
     }
   }, 1000);
 }
@@ -1009,14 +830,16 @@ function clearCountdown() {
   if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
 }
 
-function goToDetail() {
+function goBack() {
   clearCountdown();
-  if (currentBook) showDetail(currentBook.id);
-  else showPage('home');
+  if (currentBook) navigate('/book/' + currentBook.slug);
+  else navigate('/');
 }
 
-// ── INIT ──────────────────────────────────────────
-renderBooks(BOOKS);
+// ─────────────────────────────────────────
+//  BOOT
+// ─────────────────────────────────────────
+loadData();
 </script>
 </body>
 </html>
