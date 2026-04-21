@@ -1,6 +1,6 @@
 {
   "books": [
-     {
+    {
       "id": 1,
       "slug": "project-hail-mary",
       "title": "Project Hail Mary",
@@ -35,8 +35,7 @@
       "desc": "A personal finance classic that teaches how money really works through two different father figures.",
       "longDesc": "Rich Dad Poor Dad contrasts the financial philosophies of two father figures—one rich and one poor. The book challenges traditional beliefs about money, work, and investing, encouraging readers to build assets, think independently, and achieve financial freedom through financial literacy.",
       "link": "https://raw.githubusercontent.com/beye-mohammed/yallabooky/main/startbooky/Rich-Dad-Poor-Dad.pdf"
-    }
-	,
+    },
     {
       "id": 3,
       "slug": "nineteen-eighty-four",
@@ -53,7 +52,7 @@
       "color2": "#2b2b2b",
       "desc": "A chilling prophecy about the future and the dangers of totalitarianism.",
       "longDesc": "Winston Smith struggles under the oppressive regime of Big Brother, where thought is a crime and history is constantly rewritten. A powerful exploration of surveillance and control.",
-      "link": ""
+      "link": "https://raw.githubusercontent.com/beye-mohammed/yallabooky/main/startbooky/9.-Nineteen-Eighty-Four-Author-George-Orwell.pdf"
     },
     {
       "id": 4,
@@ -71,7 +70,7 @@
       "color2": "#4b0000",
       "desc": "An ancient Chinese military treatise dating from the Late Spring and Autumn Period.",
       "longDesc": "The work, which is attributed to the ancient Chinese military strategist Sun Tzu, is composed of 13 chapters. Each one is devoted to an aspect of warfare and how it applies to military strategy and tactics.",
-      "link": ""
+      "link": "https://raw.githubusercontent.com/beye-mohammed/yallabooky/main/startbooky/The-Art-of-War-Sun-Tzu.pdf"
     },
     {
       "id": 5,
@@ -89,7 +88,7 @@
       "color2": "#1b1b1b",
       "desc": "A story set in London and Paris before and during the French Revolution.",
       "longDesc": "The novel tells the story of the French Doctor Manette, his 18-year-long imprisonment in the Bastille in Paris and his release to live in London with his daughter Lucie.",
-      "link": ""
+      "link": "https://raw.githubusercontent.com/beye-mohammed/yallabooky/main/startbooky/a-tale-of-two-cities-charles-dickens.pdf"
     },
     {
       "id": 6,
@@ -107,7 +106,7 @@
       "color2": "#3e2723",
       "desc": "A group of farm animals who rebel against their human farmer.",
       "longDesc": "An allegorical novella that reflects events leading up to the Russian Revolution of 1917 and then on into the Stalinist era of the Soviet Union.",
-      "link": ""
+      "link": "https://raw.githubusercontent.com/beye-mohammed/yallabooky/main/startbooky/animal-farm-george-orwell.pdf"
     },
     {
       "id": 7,
@@ -125,7 +124,7 @@
       "color2": "#003300",
       "desc": "The tragic story of a married aristocrat and her affair with Count Vronsky.",
       "longDesc": "Widely considered one of the greatest works of literature, it explores themes of betrayal, faith, family, marriage, Imperial Russian society, and the difference between rural and city life.",
-      "link": ""
+      "link": "https://raw.githubusercontent.com/beye-mohammed/yallabooky/main/startbooky/anna-karenina-leon-tolstoi.pdf"
     },
     {
       "id": 8,
@@ -143,7 +142,7 @@
       "color2": "#1a237e",
       "desc": "A vision of a future society engineered for stability and happiness.",
       "longDesc": "Set in a future World State, citizens are environmentally engineered into social hierarchies. The novel anticipates major scientific advancements in reproductive technology and psychological manipulation.",
-      "link": ""
+      "link": "https://raw.githubusercontent.com/beye-mohammed/yallabooky/main/startbooky/brave-new-world-aldous-huxley.pdf"
     },
     {
       "id": 9,
@@ -161,7 +160,7 @@
       "color2": "#000000",
       "desc": "The mental anguish and moral dilemmas of an impoverished ex-student in Saint Petersburg.",
       "longDesc": "Raskolnikov formulates a plan to kill an unscrupulous pawnbroker for her money, arguing that with the money he could perform good deeds to counterbalance the crime.",
-      "link": ""
+      "link": "https://raw.githubusercontent.com/beye-mohammed/yallabooky/main/startbooky/crime-and-punishment-fedor-mikhailovitch-distoievski.pdf"
     },
     {
       "id": 10,
@@ -179,7 +178,7 @@
       "color2": "#210000",
       "desc": "The story of Count Dracula's attempt to move from Transylvania to England.",
       "longDesc": "An epistolary novel, meaning it is told through a series of diary entries, letters, and newspaper articles. It established many conventions of subsequent vampire fantasy.",
-      "link": ""
+      "link": "https://raw.githubusercontent.com/beye-mohammed/yallabooky/main/startbooky/dracula-bram-stoker.pdf"
     },
     {
       "id": 11,
@@ -197,7 +196,7 @@
       "color2": "#1b5e20",
       "desc": "A scientist creates a sentient creature in an unorthodox scientific experiment.",
       "longDesc": "Victor Frankenstein's quest to create life leads to the creation of a monster. The novel explores themes of ambition, isolation, and the consequences of playing God.",
-      "link": ""
+      "link": "https://raw.githubusercontent.com/beye-mohammed/yallabooky/main/startbooky/frankenstein-mary-shelley.pdf"
     },
     {
       "id": 12,
@@ -215,7 +214,7 @@
       "color2": "#263238",
       "desc": "The personal growth and development of an orphan nicknamed Pip.",
       "longDesc": "Set in Kent and London in the early to mid-19th century, it contains some of Dickens' most memorable scenes and characters, examining the class system and moral worth.",
-      "link": ""
+      "link": "https://raw.githubusercontent.com/beye-mohammed/yallabooky/main/startbooky/great-expectations-charles-dicken.pdf"
     },
     {
       "id": 13,
@@ -233,7 +232,7 @@
       "color2": "#1b0000",
       "desc": "A voyage up the Congo River into the Congo Free State.",
       "longDesc": "The story centralizes on Charles Marlow, who tells his story to friends aboard a boat anchored in the River Thames. His journey into the African interior reveals the darkness of human nature.",
-      "link": ""
+      "link": "https://raw.githubusercontent.com/beye-mohammed/yallabooky/main/startbooky/heart-of-darkness-joseph-conrad.pdf"
     },
     {
       "id": 14,
@@ -251,7 +250,7 @@
       "color2": "#3e2723",
       "desc": "The experiences of its eponymous heroine, including her growth to adulthood.",
       "longDesc": "The novel revolutionized prose fiction by being the first to focus on its protagonist's moral and spiritual development through an intimate, first-person narrative.",
-      "link": ""
+      "link": "https://raw.githubusercontent.com/beye-mohammed/yallabooky/main/startbooky/jane-eyre-charlotte-bronte.pdf"
     },
     {
       "id": 15,
@@ -269,7 +268,7 @@
       "color2": "#880e4f",
       "desc": "The lives of four sisters—Meg, Jo, Beth, and Amy—in the 19th century.",
       "longDesc": "The novel follows the lives of the four March sisters from childhood to womanhood and is loosely based on the author and her three sisters.",
-      "link": ""
+      "link": "https://raw.githubusercontent.com/beye-mohammed/yallabooky/main/startbooky/little-women-louisa-may-alcott.pdf"
     },
     {
       "id": 16,
@@ -287,7 +286,7 @@
       "color2": "#01579b",
       "desc": "The sailor Ishmael's narrative of the obsessive quest of Ahab for revenge.",
       "longDesc": "Ahab, captain of the whaling ship Pequod, seeks revenge on Moby Dick, the giant white sperm whale that on the ship's previous voyage bit off Ahab's leg at the knee.",
-      "link": ""
+      "link": "https://raw.githubusercontent.com/beye-mohammed/yallabooky/main/startbooky/moby-dick-herman-melville.pdf"
     },
     {
       "id": 17,
@@ -305,7 +304,7 @@
       "color2": "#e65100",
       "desc": "The multi-generational story of the Buendía family.",
       "longDesc": "Set in the fictional town of Macondo, the novel explores the history of the Buendía family, whose patriarch, José Arcadio Buendía, founded the town.",
-      "link": ""
+      "link": "https://raw.githubusercontent.com/beye-mohammed/yallabooky/main/startbooky/one-hundred-years-of-solitude-gabriel-garcia-marquez.pdf"
     },
     {
       "id": 18,
@@ -323,7 +322,7 @@
       "color2": "#004d40",
       "desc": "The emotional development of Elizabeth Bennet, who learns the error of making hasty judgments.",
       "longDesc": "A classic novel of manners that satirizes the provincial life of the English gentry at the end of the 18th century, focusing on the character of Elizabeth Bennet.",
-      "link": ""
+      "link": "https://raw.githubusercontent.com/beye-mohammed/yallabooky/main/startbooky/pride-and-prejudice-jane-austen.pdf"
     },
     {
       "id": 19,
@@ -341,7 +340,7 @@
       "color2": "#7f0000",
       "desc": "The tragic romance between two young star-crossed lovers.",
       "longDesc": "Two young lovers from feuding families in Verona fall in love, leading to their untimely deaths and the eventual reconciliation of their families.",
-      "link": ""
+      "link": "https://raw.githubusercontent.com/beye-mohammed/yallabooky/main/startbooky/romeo-and-juliet-william-shakespeare.pdf"
     },
     {
       "id": 20,
@@ -359,7 +358,7 @@
       "color2": "#263238",
       "desc": "The story of a man who is wrongfully imprisoned and later escapes to seek revenge.",
       "longDesc": "Edmond Dantès is a young sailor who is betrayed and imprisoned on his wedding day. Years later, he escapes and uses a hidden treasure to transform himself into the Count of Monte Cristo.",
-      "link": ""
+      "link": "https://raw.githubusercontent.com/beye-mohammed/yallabooky/main/startbooky/the-count-of-monte-cristo-alexandre-dumas.pdf"
     },
     {
       "id": 21,
@@ -377,7 +376,7 @@
       "color2": "#f57f17",
       "desc": "The story of the mysteriously wealthy Jay Gatsby and his love for Daisy Buchanan.",
       "longDesc": "Set in the Jazz Age on Long Island, the novel explores themes of decadence, idealism, resistance to change, social upheaval, and excess.",
-      "link": ""
+      "link": "https://raw.githubusercontent.com/beye-mohammed/yallabooky/main/startbooky/the-great-gatsby-f-scott-fitzgerald.pdf"
     },
     {
       "id": 22,
@@ -395,7 +394,7 @@
       "color2": "#212121",
       "desc": "The story of salesman Gregor Samsa who wakes up to find himself transformed into a huge insect.",
       "longDesc": "The novella explores the themes of alienation, family duty, and the absurdity of the human condition in a bureaucratic and unforgiving world.",
-      "link": ""
+      "link": "https://raw.githubusercontent.com/beye-mohammed/yallabooky/main/startbooky/the-metamorphosis-franz-kafka.pdf"
     },
     {
       "id": 23,
@@ -413,7 +412,7 @@
       "color2": "#0d47a1",
       "desc": "The Greek hero Odysseus' journey home after the fall of Troy.",
       "longDesc": "It takes Odysseus ten years to reach Ithaca after the ten-year Trojan War. In his absence, it is assumed he has died, and his wife Penelope must deal with rowdy suitors.",
-      "link": ""
+      "link": "https://raw.githubusercontent.com/beye-mohammed/yallabooky/main/startbooky/the-odyssey-homer.pdf"
     },
     {
       "id": 24,
@@ -431,7 +430,7 @@
       "color2": "#1b5e20",
       "desc": "The story of an aging Cuban fisherman who struggles with a giant marlin.",
       "longDesc": "One of Hemingway's most famous works, it tells the story of Santiago and his epic battle in the Gulf Stream. It was the last major work of fiction published during his lifetime.",
-      "link": ""
+      "link": "https://raw.githubusercontent.com/beye-mohammed/yallabooky/main/startbooky/the-old-man-and-the-sea-ernest-hemingway.pdf"
     },
     {
       "id": 25,
@@ -449,7 +448,7 @@
       "color2": "#4a148c",
       "desc": "A young man sells his soul so that his portrait will age instead of him.",
       "longDesc": "Dorian Gray remains youthful and beautiful while his portrait records every sin and every year of his life, leading to his eventual moral decay.",
-      "link": ""
+      "link": "https://raw.githubusercontent.com/beye-mohammed/yallabooky/main/startbooky/the-portrait-of-dorian-gray-oscar-wilde.pdf"
     },
     {
       "id": 26,
@@ -467,9 +466,9 @@
       "color2": "#263238",
       "desc": "The turbulent and doomed love story between Catherine Earnshaw and Heathcliff.",
       "longDesc": "Set on the windswept Yorkshire moors, this is a tale of obsession, revenge, and a love that transcends the grave.",
-      "link": ""
+      "link": "https://raw.githubusercontent.com/beye-mohammed/yallabooky/main/startbooky/wuthering-heights-emily-bronte.pdf"
     },
-	{
+    {
       "id": 27,
       "slug": "alices-adventures-in-wonderland",
       "title": "Alice's Adventures in Wonderland",
@@ -485,7 +484,7 @@
       "color2": "#34495e",
       "desc": "A young girl named Alice falls through a rabbit hole into a fantasy world.",
       "longDesc": "One of the best-known works of Victorian fiction, its narrative, structure, characters and imagery have been enormously influential in popular culture and literature, especially in the fantasy genre.",
-      "link": ""
+      "link": "https://raw.githubusercontent.com/beye-mohammed/yallabooky/main/startbooky/11.-Alice-s-Adventures-in-Wonderland-Author-Lewis-Carroll.pdf"
     },
     {
       "id": 28,
@@ -503,8 +502,7 @@
       "color2": "#000000",
       "desc": "A collection of twelve short stories featuring the famous detective Sherlock Holmes.",
       "longDesc": "The stories are told in a first-person narrative from the point of view of Dr. Watson and involve Holmes solving various mysteries in late Victorian London.",
-      "link": ""
+      "link": "https://raw.githubusercontent.com/beye-mohammed/yallabooky/main/startbooky/12.-The-Adventures-of-Sherlock-Holmes-Author-Arthur-Conan-Doyle.pdf"
     }
-    
   ]
 }
