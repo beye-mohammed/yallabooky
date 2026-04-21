@@ -834,19 +834,20 @@
       runCountdown(book.link);
     }
 
-  function runCountdown(link) {
+ 
+function runCountdown(link) {
   clearCountdown();
-  let seconds = 4;
-  const ring    = document.getElementById('ring');
-  const numEl   = document.getElementById('ring-number');
-  const secEl   = document.getElementById('cd-sec');
-  const barEl   = document.getElementById('cd-bar');
+  let seconds = 15;
+  const ringEl = document.getElementById('ring');
+  const numEl = document.getElementById('ring-number');
+  const secEl = document.getElementById('cd-sec');
+  const barEl = document.getElementById('cd-bar');
   const readyEl = document.getElementById('cd-ready');
-  const C       = 408; // circumference (2π×65)
+  const circumference = 408;
 
-  readyEl.style.display      = 'none';
-  ring.style.strokeDashoffset = 0;
-  barEl.style.transform       = 'scaleX(1)';
+  readyEl.style.display = 'none';
+  ringEl.style.strokeDashoffset = 0;
+  barEl.style.transform = 'scaleX(1)';
   numEl.textContent = seconds;
   secEl.textContent = seconds;
 
@@ -854,25 +855,19 @@
     seconds--;
     numEl.textContent = seconds;
     secEl.textContent = seconds;
-    const pct = seconds / 15;
-    ring.style.strokeDashoffset = C * (1 - pct);
-    barEl.style.transform       = `scaleX(${pct})`;
+    const progress = seconds / 15;
+    ringEl.style.strokeDashoffset = circumference * (1 - progress);
+    barEl.style.transform = `scaleX(${progress})`;
 
     if (seconds <= 0) {
       clearCountdown();
       readyEl.style.display = 'block';
-      
-      // Open PDF download
-      window.open(link, '_blank');
-      
-      // Redirect to home after 500ms
-      setTimeout(() => {
-        navigate('/');  // Redirects to home page
-        // OR use: window.location.href = window.location.origin + window.location.pathname;
-      }, 500);
+      setTimeout(() => { window.open(link, '_blank'); }, 500);
     }
   }, 1000);
 }
+
+
 
     function clearCountdown() {
       if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
