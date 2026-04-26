@@ -504,6 +504,9 @@
       "longDesc": "The stories are told in a first-person narrative from the point of view of Dr. Watson and involve Holmes solving various mysteries in late Victorian London.",
       "link": "https://raw.githubusercontent.com/beye-mohammed/yallabooky/main/startbooky/12.-The-Adventures-of-Sherlock-Holmes-Author-Arthur-Conan-Doyle.pdf"
     },
+
+
+
     
     {
     "id": 29,
@@ -516,12 +519,12 @@
     "lang": "EN",
     "format": "PDF",
     "badge": "spiritual",
-    "cover": "https://m.media-amazon.com/images/I/71ajd5BEHyL.jpg",
+    "cover": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgirxYSG6I4n3UcUpd6SnTOlyx6LcxdGzuKO-dzU04xI-HNbx1mX-c9x1A5cwiX_7zBW9LswSmdphLrMUkuMCKVRlotBMS8TzpGjIiHNoBj0ibNyhwMvUTbXLT2wnDcZihp_nvO7uMPgTgbqaPC5j5mauegKJ1YiyH7UT4Gct0hmKmY3FOSTmd7y0ySmwI4/w474-h640/Artboard%203_45.png",
     "color1": "#2c3e50",
     "color2": "#34495e",
     "desc": "A collection of daily sayings of the Prophet Muhammad ﷺ for reflection and guidance.",
     "longDesc": "This book presents authentic sayings (Hadith) of the Prophet Muhammad ﷺ arranged for daily reading. It offers spiritual guidance, ethical teachings, and practical wisdom to help Muslims reflect on their faith and improve their daily lives.",
-    "link": "https://dokumen.pub/daily-wisdom-sayings-of-the-prophet-muhammad-1847740189-9781847740182.html"
+    "link": "https://raw.githubusercontent.com/beye-mohammed/yallabooky/main/startbooky/Abdur Raheem Kidwai - Daily Wisdom_ Sayings of the Prophet Muhammad (2010).pdf"
   },
   {
     "id": 30,
@@ -534,12 +537,12 @@
     "lang": "EN",
     "format": "PDF",
     "badge": "bestseller",
-    "cover": "https://m.media-amazon.com/images/I/91LVFy-Y2XL.jpg",
+    "cover": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjFp82XBmwCcHzDp-O0b6OLon4aqJf1uWhJKoc-kWOLes_4LpF551fFjRGeelH4QtNc3AyEaYg5tbcTWVXa5S2pm7Ua4Q6Vd3aFewVHwnKEjuZxVrNoah5wDNMLy9oHnSrcC5mdJmuAdygaySM5IwC5BUhKvr5hlFWphGaZL8jczlAWyrFE1marr4Lzj2JW/w474-h640/Artboard%203_43.png",
     "color1": "#6a1b9a",
     "color2": "#8e24aa",
     "desc": "A spiritual journey into understanding Allah’s love and deepening faith.",
     "longDesc": "Secrets of Divine Love takes readers on a transformative journey through Islamic spirituality, combining Qur’anic teachings, Hadith, poetry, and personal reflections. It focuses on building a deep emotional and spiritual connection with Allah, emphasizing love, mercy, and purpose in life. :contentReference[oaicite:0]{index=0}",
-    "link": "https://archive.org/details/secrets-of-divine-love-a-spiritual-journey-into-the-heart-of-islam"
+    "link": "https://raw.githubusercontent.com/beye-mohammed/yallabooky/main/startbooky/A. Helwa{Secrets of Divine Love}(2019, Naulit Publishing House.pdf"
   },
   {
     "id": 31,
@@ -557,7 +560,7 @@
     "color2": "#27ae60",
     "desc": "A powerful reminder of the people and actions loved by Allah.",
     "longDesc": "In this inspiring book, Omar Suleiman explores who and what Allah loves based on Qur’an and Hadith. It encourages readers to embody qualities beloved to Allah, such as patience, kindness, and sincerity, helping them strengthen their relationship with Him.",
-    "link": "https://archive.org/details/allah-loves-omar-suleiman"
+    "link": "https://raw.githubusercontent.com/beye-mohammed/yallabooky/main/startbooky/Omar Suleiman - Allah Loves (2020, Kube Publishing) - libgen.li.pdf"
   },
   {
     "id": 32,
@@ -570,12 +573,12 @@
     "lang": "EN",
     "format": "PDF",
     "badge": "beginner",
-    "cover": "https://m.media-amazon.com/images/I/31Zk-ZoU04L.jpg",
+    "cover": "https://m.media-amazon.com/images/I/71ajd5BEHyL.jpg",
     "color1": "#2e86c1",
     "color2": "#5dade2",
     "desc": "A beginner-friendly introduction to Islam, its beliefs, and history.",
-    "longDesc": "This book provides a concise and accessible overview of Islam, covering its origins, core beliefs, practices, and cultural impact. It is ideal for beginners or anyone seeking a clear understanding of the religion without complexity.",
-    "link": "https://archive.org/details/islam-explained-short-introduction"
+    "longDesc": "This book answers all of that beautifully. Published by Callisto, Islam Explained takes you on a compact but rich journey through Islamic history, core teachings, and the cultural traditions that have shaped Muslim communities around the world. It's the kind of book that gives you real context — not just facts, but meaning behind those facts.",
+    "link": "https://raw.githubusercontent.com/beye-mohammed/yallabooky/main/startbooky/Islam Explained - A Short Introduction to History, -- Salim, Ahmad Rashid.pdf"
   }
     
   ]
