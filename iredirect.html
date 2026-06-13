@@ -1,284 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Redirecting...</title>
+</head>
+<body>
 
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: var(--font-sans); }
+<p>Redirecting...</p>
 
-  .page { max-width: 780px; margin: 0 auto; padding: 2rem 1.5rem 3rem; }
+<script>
 
-  .top-bar {
-    display: flex; align-items: center; justify-content: space-between;
-    padding-bottom: 1.5rem; border-bottom: 0.5px solid var(--color-border-tertiary);
-    margin-bottom: 2rem;
-  }
-  .logo { display: flex; align-items: center; gap: 10px; }
-  .logo-icon {
-    width: 36px; height: 36px; border-radius: 10px;
-    background: #e8320a; display: flex; align-items: center; justify-content: center;
-  }
-  .logo-icon span { color: #fff; font-weight: 500; font-size: 13px; letter-spacing: 0.5px; }
-  .logo-text { font-size: 15px; font-weight: 500; color: var(--color-text-primary); }
-  .logo-sub { font-size: 11px; color: var(--color-text-secondary); }
-  .back-link {
-    font-size: 13px; color: #e8320a; text-decoration: none;
-    display: flex; align-items: center; gap: 4px;
-    border: 0.5px solid #e8320a33; padding: 6px 12px; border-radius: var(--border-radius-md);
-  }
+async function startRedirect() {
 
-  .hero { text-align: center; padding: 2rem 0 2.5rem; }
-  .hero-badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: #e8320a14; border: 0.5px solid #e8320a44;
-    color: #c02800; font-size: 12px; padding: 5px 14px;
-    border-radius: 99px; margin-bottom: 1rem;
-  }
-  .hero h1 { font-size: 28px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 0.75rem; }
-  .hero p { font-size: 15px; color: var(--color-text-secondary); line-height: 1.7; max-width: 520px; margin: 0 auto; }
-  .meta { font-size: 12px; color: var(--color-text-tertiary); margin-top: 1rem; }
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get("q");
 
-  .toc {
-    background: var(--color-background-secondary);
-    border: 0.5px solid var(--color-border-tertiary);
-    border-radius: var(--border-radius-lg);
-    padding: 1.25rem 1.5rem; margin-bottom: 2.5rem;
-  }
-  .toc-title { font-size: 12px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem; }
-  .toc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 6px; }
-  .toc-item {
-    display: flex; align-items: center; gap: 8px;
-    font-size: 13px; color: var(--color-text-secondary);
-    padding: 5px 0;
-  }
-  .toc-num {
-    width: 20px; height: 20px; border-radius: 50%;
-    background: #e8320a18; color: #c02800;
-    font-size: 11px; font-weight: 500;
-    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-  }
+    if (!q) {
+        document.body.innerHTML = "Missing parameter q";
+        return;
+    }
 
-  .section { margin-bottom: 2rem; }
-  .section-header {
-    display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;
-    padding-bottom: 0.75rem; border-bottom: 0.5px solid var(--color-border-tertiary);
-  }
-  .section-icon {
-    width: 34px; height: 34px; border-radius: 9px;
-    background: #e8320a14; border: 0.5px solid #e8320a33;
-    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-  }
-  .section-icon i { font-size: 17px; color: #c02800; }
-  .section-title { font-size: 17px; font-weight: 500; color: var(--color-text-primary); }
+    try {
 
-  .section p { font-size: 14px; color: var(--color-text-secondary); line-height: 1.75; margin-bottom: 0.75rem; }
+        const response = await fetch("data.json");
+        const data = await response.json();
 
-  .item-list { list-style: none; padding: 0; margin-top: 0.5rem; }
-  .item-list li {
-    display: flex; align-items: flex-start; gap: 10px;
-    font-size: 14px; color: var(--color-text-secondary);
-    padding: 7px 0; line-height: 1.6;
-    border-bottom: 0.5px solid var(--color-border-tertiary);
-  }
-  .item-list li:last-child { border-bottom: none; }
-  .dot { width: 6px; height: 6px; border-radius: 50%; background: #e8320a; margin-top: 7px; flex-shrink: 0; }
+        const item = data.find(x => x.link === q);
 
-  .callout {
-    background: #e8320a0c; border: 0.5px solid #e8320a33;
-    border-radius: var(--border-radius-md); padding: 0.875rem 1rem;
-    display: flex; gap: 10px; align-items: flex-start; margin-top: 1rem;
-  }
-  .callout i { font-size: 16px; color: #c02800; margin-top: 2px; flex-shrink: 0; }
-  .callout p { font-size: 13px; color: #c02800; line-height: 1.6; margin: 0; }
+        if (item) {
+            window.location.replace(item.tolink);
+        } else {
+            document.body.innerHTML = "Link not found";
+        }
 
-  .rights-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 1rem; }
-  .right-card {
-    background: var(--color-background-secondary);
-    border: 0.5px solid var(--color-border-tertiary);
-    border-radius: var(--border-radius-md);
-    padding: 0.875rem 1rem;
-  }
-  .right-card i { font-size: 18px; color: #c02800; margin-bottom: 6px; display: block; }
-  .right-card .rc-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 3px; }
-  .right-card .rc-desc { font-size: 12px; color: var(--color-text-secondary); line-height: 1.6; }
+    } catch (e) {
+        document.body.innerHTML = "Error loading data";
+    }
 
-  .contact-box {
-    background: var(--color-background-secondary);
-    border: 0.5px solid var(--color-border-tertiary);
-    border-radius: var(--border-radius-lg);
-    padding: 1.5rem; text-align: center; margin-top: 2rem;
-  }
-  .contact-box i { font-size: 28px; color: #c02800; margin-bottom: 0.75rem; display: block; }
-  .contact-box h3 { font-size: 16px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 0.5rem; }
-  .contact-box p { font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; margin-bottom: 1rem; }
-  .contact-btn {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: #e8320a; color: #fff;
-    font-size: 13px; font-weight: 500; padding: 9px 20px;
-    border-radius: var(--border-radius-md); text-decoration: none;
-    border: none; cursor: pointer;
-  }
+}
 
-  .footer {
-    text-align: center; margin-top: 2.5rem;
-    padding-top: 1.5rem; border-top: 0.5px solid var(--color-border-tertiary);
-    font-size: 12px; color: var(--color-text-tertiary);
-  }
-  .footer a { color: #c02800; text-decoration: none; }
-</style>
+startRedirect();
 
-<div class="page">
-  <h2 class="sr-only">BEYE Store Privacy Policy</h2>
+</script>
 
-  <div class="top-bar">
-    <div class="logo">
-      <div class="logo-icon"><span>BEYE</span></div>
-      <div>
-        <div class="logo-text">BEYE Store</div>
-        <div class="logo-sub">Premium App Repository</div>
-      </div>
-    </div>
-    <a class="back-link" href="https://zikapps.netlify.app/">
-      <i class="ti ti-arrow-left" aria-hidden="true"></i> Back to Store
-    </a>
-  </div>
-
-  <div class="hero">
-    <div class="hero-badge">
-      <i class="ti ti-lock" aria-hidden="true"></i>
-      Privacy First
-    </div>
-    <h1>Privacy Policy</h1>
-    <p>We respect your privacy. Here's a clear, simple explanation of what data we handle and why — no legal jargon.</p>
-    <div class="meta">Last updated: January 2026</div>
-  </div>
-
-  <div class="toc">
-    <div class="toc-title">Table of Contents</div>
-    <div class="toc-grid">
-      <div class="toc-item"><span class="toc-num">1</span> Data We Collect</div>
-      <div class="toc-item"><span class="toc-num">2</span> How We Use It</div>
-      <div class="toc-item"><span class="toc-num">3</span> Third-Party Services</div>
-      <div class="toc-item"><span class="toc-num">4</span> Advertising</div>
-      <div class="toc-item"><span class="toc-num">5</span> Children's Privacy</div>
-      <div class="toc-item"><span class="toc-num">6</span> Your Rights</div>
-      <div class="toc-item"><span class="toc-num">7</span> External Links</div>
-      <div class="toc-item"><span class="toc-num">8</span> Contact Us</div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-header">
-      <div class="section-icon"><i class="ti ti-database" aria-hidden="true"></i></div>
-      <div class="section-title">1. Data We Collect</div>
-    </div>
-    <p>When you visit BEYE Store, we may automatically collect limited technical data to help us understand how the site is used:</p>
-    <ul class="item-list">
-      <li><span class="dot"></span>IP address (anonymized) and approximate geographic location</li>
-      <li><span class="dot"></span>Browser type, device, and operating system</li>
-      <li><span class="dot"></span>Pages visited, time spent, and navigation patterns</li>
-      <li><span class="dot"></span>Traffic source (search, social media, direct)</li>
-    </ul>
-    <p style="margin-top:0.75rem">We do not collect your name, email, or personal details unless you voluntarily contact us.</p>
-  </div>
-
-  <div class="section">
-    <div class="section-header">
-      <div class="section-icon"><i class="ti ti-settings" aria-hidden="true"></i></div>
-      <div class="section-title">2. How We Use Your Data</div>
-    </div>
-    <p>The data we collect is used exclusively for:</p>
-    <ul class="item-list">
-      <li><span class="dot"></span>Improving the store's content and user experience</li>
-      <li><span class="dot"></span>Understanding which apps and categories are most popular</li>
-      <li><span class="dot"></span>Responding to messages and developer inquiries</li>
-    </ul>
-    <div class="callout">
-      <i class="ti ti-shield-check" aria-hidden="true"></i>
-      <p>We will never sell your data or share it with third parties beyond what is required to operate this site.</p>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-header">
-      <div class="section-icon"><i class="ti ti-plug" aria-hidden="true"></i></div>
-      <div class="section-title">3. Third-Party Services</div>
-    </div>
-    <p>BEYE Store may use the following third-party services, each with their own privacy policies:</p>
-    <ul class="item-list">
-      <li><span class="dot"></span><strong style="color:var(--color-text-primary);font-weight:500">Google Analytics</strong> — Visitor statistics and behavior analytics</li>
-      <li><span class="dot"></span><strong style="color:var(--color-text-primary);font-weight:500">Netlify</strong> — Hosting platform that may log access requests</li>
-      <li><span class="dot"></span><strong style="color:var(--color-text-primary);font-weight:500">Firebase / AdMob</strong> — Used in distributed apps for analytics and ads</li>
-    </ul>
-    <p>We encourage you to review the privacy policies of these services independently.</p>
-  </div>
-
-  <div class="section">
-    <div class="section-header">
-      <div class="section-icon"><i class="ti ti-speakerphone" aria-hidden="true"></i></div>
-      <div class="section-title">4. Advertising</div>
-    </div>
-    <p>Apps distributed through BEYE Store may use <strong style="color:var(--color-text-primary);font-weight:500">Google AdMob</strong> or similar advertising SDKs. These services may display personalized ads based on your interests and usage behavior.</p>
-    <div class="callout">
-      <i class="ti ti-info-circle" aria-hidden="true"></i>
-      <p>Each individual app has its own ad configuration. You can opt out of personalized ads through your device settings under Google → Ads.</p>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-header">
-      <div class="section-icon"><i class="ti ti-user-x" aria-hidden="true"></i></div>
-      <div class="section-title">5. Children's Privacy</div>
-    </div>
-    <p>BEYE Store is intended for users aged 13 and older. We do not knowingly collect personal data from children under 13.</p>
-    <p>If you believe a child has submitted data without parental consent, please contact us immediately and we will delete it promptly.</p>
-  </div>
-
-  <div class="section">
-    <div class="section-header">
-      <div class="section-icon"><i class="ti ti-scale" aria-hidden="true"></i></div>
-      <div class="section-title">6. Your Rights</div>
-    </div>
-    <div class="rights-grid">
-      <div class="right-card">
-        <i class="ti ti-eye" aria-hidden="true"></i>
-        <div class="rc-title">Access</div>
-        <div class="rc-desc">Request a copy of any personal data we hold about you</div>
-      </div>
-      <div class="right-card">
-        <i class="ti ti-edit" aria-hidden="true"></i>
-        <div class="rc-title">Correction</div>
-        <div class="rc-desc">Request corrections to any inaccurate data</div>
-      </div>
-      <div class="right-card">
-        <i class="ti ti-trash" aria-hidden="true"></i>
-        <div class="rc-title">Deletion</div>
-        <div class="rc-desc">Request complete deletion of your personal data</div>
-      </div>
-      <div class="right-card">
-        <i class="ti ti-ban" aria-hidden="true"></i>
-        <div class="rc-title">Opt-Out</div>
-        <div class="rc-desc">Opt out of analytics via the Google Analytics browser add-on</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-header">
-      <div class="section-icon"><i class="ti ti-external-link" aria-hidden="true"></i></div>
-      <div class="section-title">7. External Links</div>
-    </div>
-    <p>BEYE Store may contain links to external download sources, stores, or developer pages. These sites operate independently and have their own privacy policies. We are not responsible for their practices.</p>
-  </div>
-
-  <div class="contact-box">
-    <i class="ti ti-message-circle" aria-hidden="true"></i>
-    <h3>Have a Privacy Question?</h3>
-    <p>Reach out to the developer directly. We aim to respond to all privacy-related inquiries promptly.</p>
-    <a class="contact-btn" href="https://www.instagram.com/bzikoukmohammed" target="_blank">
-      <i class="ti ti-brand-instagram" aria-hidden="true"></i>
-      Contact on Instagram
-    </a>
-  </div>
-
-  <div class="footer">
-    © 2026 <a href="https://zikapps.netlify.app/">BEYE Store</a> — All rights reserved
-  </div>
-</div>
+</body>
+</html>
