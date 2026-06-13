@@ -1,23 +1,10 @@
-{
-  "AppsPromote": [
-    {
-      "name": "Anime Wonderland 4k Wallpapers",
-      "packageName": "https://zikapps.netlify.app/",
-      "icon": "https://appimg-dre.dbankcdn.com/application/icon144/10141/00c2532deed549fc9f2efe1fb7cc5414.png",
-      "preview": "https://appimg-dre.dbankcdn.com/application/icon144/10141/00c2532deed549fc9f2efe1fb7cc5414.png",
-      "shortDescription": "⭐ Anime 4K Wallpapers ⭐ Your Gateway to a Fantasy World of Anime Art!",
-      "screenShot": [
-        "https://appimg-dre.dbankcdn.com/application/screenshut2/10141/00c2532deed549fc9f2efe1fb7cc5414.jpg",
-        "https://appimg-dre.dbankcdn.com/application/screenshut3/10141/00c2532deed549fc9f2efe1fb7cc5414.jpg",
-        "https://appimg-dre.dbankcdn.com/application/screenshut4/10141/00c2532deed549fc9f2efe1fb7cc5414.jpg",
-        "https://appimg-dre.dbankcdn.com/application/screenshut5/10141/00c2532deed549fc9f2efe1fb7cc5414.jpg",
-        "https://appimg-dre.dbankcdn.com/application/screenshut6/10141/00c2532deed549fc9f2efe1fb7cc5414.jpg",
-        "https://appimg-dre.dbankcdn.com/application/screenshut7/10141/00c2532deed549fc9f2efe1fb7cc5414.jpg",
-        "https://appimg-dre.dbankcdn.com/application/screenshut8/10141/00c2532deed549fc9f2efe1fb7cc5414.jpg"
-      ]
-    }
-
-  ] 
-  
-  
-}
+[
+  {
+    "link": "msjxlss",
+    "tolink": "https://chatgpt.com"
+  },
+  {
+    "link": "google",
+    "tolink": "https://google.com"
+  }
+]
